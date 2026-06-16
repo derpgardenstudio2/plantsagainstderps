@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PAD Modder</title>
+  <link rel="stylesheet" href="mod.css" />
+</head>
+<body>
+  <main class="app">
+    <header class="hero">
+      <div>
+        <h1>PAD Modder</h1>
+        <p>Create custom Plants Against Derps levels, save them to your browser, and export share codes.</p>
+      </div>
+      <nav class="hero-actions">
+        <a class="btn ghost" href="../">Back to Game</a>
+        <button class="btn" id="newLevelBtn">New Level</button>
+        <button class="btn" id="saveBtn">Save Level</button>
+      </nav>
+    </header>
+    <section class="layout">
+      <aside class="panel sidebar">
+        <h2>Saved Levels</h2>
+        <div id="savedLevels" class="saved-list"></div>
+        <hr />
+        <h2>Import / Export</h2>
+        <button class="btn full" id="exportBtn">Export Share Code</button>
+        <button class="btn full" id="importBtn">Import Share Code</button>
+        <textarea id="shareBox" placeholder="Share code appears here. Paste a code here to import."></textarea>
+        <p class="hint">Saved levels use your browser storage. Export codes are better for sending to friends.</p>
+      </aside>
+      <section class="panel editor">
+        <h2>Level Settings</h2>
+        <div class="form-grid">
+          <label>Level Name<input id="levelName" value="Custom-1" maxlength="24" /></label>
+          <label>Title<input id="levelTitle" value="My Weird Level" maxlength="50" /></label>
+          <label class="wide">Description<input id="levelDesc" value="Made in PAD Modder." maxlength="120" /></label>
+          <label>Start Glow<input id="startGlow" type="number" min="0" max="5000" value="200" /></label>
+          <label>Background<select id="backgroundSelect"></select></label>
+          <label>Music<select id="musicSelect"></select></label>
+        </div>
+        <section class="tool-row">
+          <div><h2>Lava Grid</h2><p class="hint">Click tiles to toggle lava. Coordinates are [column, row].</p></div>
+          <button class="btn ghost" id="clearLavaBtn">Clear Lava</button>
+        </section>
+        <div id="lavaGrid" class="lava-grid" aria-label="Lava grid editor"></div>
+        <section class="tool-row">
+          <div><h2>Waves</h2><p class="hint">Up to 5 waves. Up to 12 enemies per wave. Delay is in game ticks.</p></div>
+          <div class="tool-actions"><button class="btn ghost" id="addWaveBtn">Add Wave</button><button class="btn ghost danger" id="clearWavesBtn">Clear Waves</button></div>
+        </section>
+        <div id="wavesArea"></div>
+      </section>
+      <aside class="panel preview"><h2>Preview JSON</h2><pre id="jsonPreview"></pre></aside>
+    </section>
+  </main>
+  <script src="mod.js"></script>
+</body>
+</html>
