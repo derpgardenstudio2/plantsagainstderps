@@ -3,7 +3,7 @@
 A goofy lane-defense browser game for GitHub Pages.
 
 ## Modding
-When in-game (https://derpgardenstudio.github.io/plants-against-derps/) 
+When in-game (https://derpgardenstudio2.github.io/plantsagainstderps/) 
 you can right click > inspect
 and mess around. The config is easy.
 Lava uses [column, row]. Rows are 0-4, columns are 0-8.
