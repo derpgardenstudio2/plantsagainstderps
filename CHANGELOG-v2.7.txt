@@ -1,0 +1,29 @@
+Plants Against Derps v2.7 - Fangame Forge Update
+
+Main fixes:
+- Removed/blocked accidental alien plant ids from plant configs.
+- Fixed Odd Alien image to use assets/alien.png.
+- Reinforced Alien Gunner ranged shooting settings.
+- Fixed duplicated add-on levels so they extend World 4 instead of looping as World 3.
+- Added World 4-16 through 4-20.
+- Updated homepage UI with clearer update cards.
+- Grouped level select by world.
+- Grouped almanac plants/enemies like the level system.
+- Added save migration from older PAD v2.5/v2.6 key.
+- Added missing-image friendly config group structure.
+
+New uploaded assets:
+- Moss Cannon
+- Kaboom Cannon
+- Three-Gun Prototype config/art, hidden from normal loadout for now
+- Guntank Boi
+- Unknown Cubes
+- Raging Boi
+
+Modder/Fangame Forge:
+- Rebuilt modder UI with tabs.
+- Improved level editor with world/difficulty metadata.
+- Added Plant Maker.
+- Added Derp Maker.
+- Added Fangame Pack JSON export.
+- Added new enemy options and bigger wave limits.

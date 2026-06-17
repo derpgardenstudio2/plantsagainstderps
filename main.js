@@ -1,5 +1,5 @@
 // ============================================================
-// Plants Against Derps v2.6 - derpgardenstudio2 Expansion
+// Plants Against Derps v2.7 - Fangame Forge Update
 // Edit in the config thingy
 // Features: direct image paths, pink-square fallback, fixed unlocks,
 // loadout picker, upgrades, minigames, chess 1-4, enemy sizes/hitboxes,
@@ -11,7 +11,7 @@
 
 const CONFIG = {
   gameTitle: "Plants Against Derps",
-  saveKey: "plantsAgainstDerps_v25_save",
+  saveKey: "plantsAgainstDerps_v27_save",
 
   board: { canvasW: 900, canvasH: 520, rows: 5, cols: 9, gridX: 80, gridY: 78, cellW: 86, cellH: 82 },
 
@@ -64,7 +64,7 @@ const CONFIG = {
     fastDerp: "assets/enemy-fast-derp.png",
     assasinRover: "assets/assasin-rover.png",
     mechaDerp: "assets/mechaderp.png",
-    alien: "assets/alien1.png",
+    alien: "assets/alien.png",
     alienGod: "assets/aliengod.png",
     alienFinalBoss: "assets/alienfinalboss.png",
     alienGun: "assets/aliengun.png",
@@ -2337,6 +2337,16 @@ canvas {
   }
 }
 
+/* PAD v2.7 homepage/editor polish */
+.pad-home-v27 { grid-template-columns: minmax(280px, 420px) 1fr; }
+.heroPanel { border-color: rgba(245,255,120,.55); background: linear-gradient(180deg, rgba(4,20,25,.86), rgba(10,35,45,.72)); }
+.bigMenuButtons .btn { font-size: 16px; padding: 14px 16px; }
+.updatePanel h2 { margin-top: 0; }
+.miniCards { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+.worldGroup { margin: 18px 0 28px; }
+.worldGroup h2 { border-left: 6px solid #dfff5a; padding-left: 10px; text-shadow: 0 0 10px rgba(223,255,90,.45); }
+@media (max-width: 760px) { .pad-home-v27 { grid-template-columns: 1fr; } }
+
 /* derpgardenstudio2 polish */
 body::before {
   content: "";
@@ -4545,5 +4555,329 @@ function boot() {
 
   console.log("PAD v2.6 derpgardenstudio2 Expansion booted.");
 }
+
+
+// ============================================================
+// PAD v2.7 - Fangame Forge Update patch
+// Adds grouped plant/enemy configs, World 4 extension fixes,
+// new uploaded art, homepage polish, hidden maker support, and
+// fixes Odd Alien / Alien Gunner behavior.
+// ============================================================
+function applyPAD27Patch() {
+  CONFIG.version = "2.7 Fangame Forge Update";
+  CONFIG.gameTitle = "Plants Against Derps: Fangame Forge Update";
+  CONFIG.saveKey = "plantsAgainstDerps_v27_save";
+
+  Object.assign(CONFIG.images, {
+    alien: "assets/alien.png",
+    mossCannon: "assets/plant-moss-cannon.png",
+    kaboomCannon: "assets/plant-kaboom-cannon.png",
+    threeGunPrototype: "assets/plant-three-gun-prototype.png",
+    guntankBoi: "assets/enemy-guntank-boi.png",
+    unknownCubes: "assets/enemy-unknown-cubes.png",
+    ragingBoi: "assets/enemy-raging-boi.png"
+  });
+
+  // Remove old/accidental alien plant ids if any older save/build had them.
+  delete CONFIG.plants.alienPlant;
+  delete CONFIG.plants.oddAlienPlant;
+  delete CONFIG.plants.alien;
+
+  // Texture/config groups so plants are organized more like the level system.
+  CONFIG.plantGroups = {
+    economy: {
+      title: "Economy / Glow Goblins",
+      plants: ["campfr", "glowMush", "solarPanel", "taxRock"]
+    },
+    walls: {
+      title: "Walls / Stuff That Gets Hit",
+      plants: ["cardboardWall", "soggyMattress", "rustyFridge"]
+    },
+    shooters: {
+      title: "Shooters",
+      plants: ["treeGun", "rosegun", "bucketStalk", "mossCannon"]
+    },
+    specials: {
+      title: "Special / Explosive / Prototype",
+      plants: ["beachBall", "kaboom", "kaboomCannon", "cloudPopper", "starfruitKnockoff", "threeGunPrototype"]
+    }
+  };
+
+  CONFIG.enemyGroups = {
+    derps: { title: "Derps", enemies: ["basic", "armored", "fast", "assasinRover", "wetDerp", "mechaDerp"] },
+    machines: { title: "Machines", enemies: ["droneGun", "droneSaw", "guntankBoi", "unknownCubes", "cardboardTank"] },
+    aliens: { title: "Aliens", enemies: ["alien", "alienGun", "alienShotgunner", "alienGod", "alienFinalBoss", "ragingBoi"] }
+  };
+
+  Object.assign(CONFIG.plants, {
+    mossCannon: {
+      name: "Moss Cannon",
+      cost: 150,
+      hp: 120,
+      img: "mossCannon",
+      desc: "A mossy cannon that fires chunky green shots. Bonus damage versus machines.",
+      role: "Heavy Shooter",
+      unlockAt: "4-2",
+      shooter: true,
+      fireType: "straight",
+      shootCooldown: 175,
+      projectileDamage: 48,
+      projectileSpeed: 5.2,
+      bonusVsTags: ["machine", "drone"],
+      bonusMultiplier: 1.45,
+      placementCooldown: 310
+    },
+    kaboomCannon: {
+      name: "Kaboom Cannon",
+      cost: 250,
+      hp: 90,
+      img: "kaboomCannon",
+      desc: "Lobs explosive nonsense. Like El Kaboom, but with commitment issues.",
+      role: "Lob Explosive",
+      unlockAt: "4-4",
+      shooter: true,
+      fireType: "lob",
+      shootCooldown: 245,
+      projectileDamage: 75,
+      projectileSpeed: 4.3,
+      areaRadius: 95,
+      placementCooldown: 450
+    },
+    threeGunPrototype: {
+      name: "Three-Gun Prototype",
+      cost: 190,
+      hp: 85,
+      img: "threeGunPrototype",
+      desc: "Prototype art/config for fangames. The 3-lane shooting code exists, but this plant stays locked for now.",
+      role: "Prototype / Maker Asset",
+      unlockAt: "NEVER_USED_YET",
+      shooter: true,
+      fireType: "multiLane",
+      shootCooldown: 150,
+      projectileDamage: 18,
+      projectileSpeed: 6,
+      placementCooldown: 320,
+      hiddenPrototype: true
+    }
+  });
+
+  Object.assign(CONFIG.enemies, {
+    guntankBoi: {
+      name: "Guntank Boi",
+      hp: 720,
+      speed: 0.075,
+      damage: 30,
+      img: "guntankBoi",
+      size: 1.55,
+      tags: ["machine"],
+      boss: true,
+      rangedShooter: true,
+      shootCooldown: 135,
+      shotDamage: 18,
+      shotSpeed: 3.8,
+      desc: "A tank with questionable licensing and too many tiny gun bits."
+    },
+    unknownCubes: {
+      name: "Unknown Cubes",
+      hp: 480,
+      speed: 0.11,
+      damage: 24,
+      img: "unknownCubes",
+      size: 1.35,
+      tags: ["alien", "glitch"],
+      rangedShooter: true,
+      multiShot: true,
+      shootCooldown: 165,
+      shotDamage: 12,
+      shotSpeed: 3.4,
+      desc: "Purple cubes asking questions nobody wants to answer."
+    },
+    ragingBoi: {
+      name: "Raging Boi",
+      hp: 260,
+      speed: 0.34,
+      damage: 26,
+      img: "ragingBoi",
+      size: 1.12,
+      tags: ["derp"],
+      desc: "A derp who discovered forward momentum and anger."
+    }
+  });
+
+  // Hard fix: Odd Alien uses the alien PNG; Alien Gunner definitely shoots.
+  CONFIG.enemies.alien.img = "alien";
+  Object.assign(CONFIG.enemies.alienGun, {
+    img: "alienGun",
+    rangedShooter: true,
+    shootCooldown: 115,
+    shotDamage: 18,
+    shotSpeed: 4.8,
+    desc: "Shoots plants from range. Fixed in v2.7 so it actually does the pew-pew job."
+  });
+
+  // Rename accidentally duplicated post-expansion World 3 levels into real World 4 extension.
+  const duplicateTitles = new Map([
+    ["Drone Rude Awakening", "4-11"],
+    ["Alien Gun Safety Violation", "4-12"],
+    ["Stacking Tutorial But Violent", "4-13"],
+    ["Multi-Lane Meltdown", "4-14"],
+    ["The Reupload Boss", "4-15"]
+  ]);
+
+  for (const lv of CONFIG.levels) {
+    if (duplicateTitles.has(lv.title)) {
+      lv.name = duplicateTitles.get(lv.title);
+      lv.background = lv.background || "milkyway";
+      lv.music = lv.music || "finalBoss";
+      lv.world = 4;
+      lv.desc = (lv.desc || "") + " [v2.7: moved into extended World 4.]";
+    }
+  }
+
+  // New extended World 4 content using the uploaded enemies/plants.
+  const existingNames = new Set(CONFIG.levels.map(lv => lv.name));
+  const extraWorld4 = [
+    {
+      name: "4-16", title: "Moss Cannon Field Test", desc: "Moss Cannon finally gets a job. Guntank Boi strongly disagrees.", startGlow: 520, background: "milkyway", music: "battle", world: 4,
+      waves: [[{type:"guntankBoi",row:2,delay:160}], [{type:"alienGun",row:0,delay:120},{type:"alienGun",row:4,delay:260},{type:"ragingBoi",row:2,delay:380}], [{type:"guntankBoi",row:1,delay:160},{type:"guntankBoi",row:3,delay:420}]], lava:[[4,2],[5,2]]
+    },
+    {
+      name: "4-17", title: "Unknown Cube Stack", desc: "The cubes are staring. The lawn is not paid enough for this.", startGlow: 560, background: "milkyway", music: "finalBoss", world: 4,
+      waves: [[{type:"unknownCubes",row:1,delay:120},{type:"unknownCubes",row:3,delay:260}], [{type:"alienShotgunner",row:2,delay:180},{type:"unknownCubes",row:0,delay:360},{type:"unknownCubes",row:4,delay:520}], [{type:"alienGod",row:2,delay:260},{type:"unknownCubes",row:1,delay:520},{type:"unknownCubes",row:3,delay:760}]], lava:[[3,1],[3,3],[6,2]]
+    },
+    {
+      name: "4-18", title: "Raging Boi Sprint", desc: "A bad idea at high speed. Bring walls or emotional support.", startGlow: 500, background: "cloud", music: "battle", world: 4,
+      waves: [[{type:"ragingBoi",row:0,delay:100},{type:"ragingBoi",row:2,delay:220},{type:"ragingBoi",row:4,delay:340}], [{type:"ragingBoi",row:1,delay:80},{type:"ragingBoi",row:3,delay:180},{type:"guntankBoi",row:2,delay:460}], [{type:"ragingBoi",row:0,delay:80},{type:"ragingBoi",row:1,delay:160},{type:"ragingBoi",row:2,delay:240},{type:"ragingBoi",row:3,delay:320},{type:"ragingBoi",row:4,delay:400}]], lava:[[2,0],[2,4]]
+    },
+    {
+      name: "4-19", title: "Kaboom Cannon License Test", desc: "Lob shots, tank shots, alien shots. Everyone is shooting. Concerning.", startGlow: 620, background: "milkyway", music: "finalBoss", world: 4,
+      waves: [[{type:"guntankBoi",row:0,delay:130},{type:"guntankBoi",row:4,delay:300}], [{type:"unknownCubes",row:2,delay:220},{type:"alienGun",row:1,delay:360},{type:"alienGun",row:3,delay:520}], [{type:"guntankBoi",row:1,delay:180},{type:"unknownCubes",row:2,delay:440},{type:"guntankBoi",row:3,delay:700}]], lava:[[4,0],[4,4],[5,2]]
+    },
+    {
+      name: "4-20", title: "World 4 Actually Ends Here", desc: "The loopback curse is gone. Unfortunately, the enemies noticed.", startGlow: 700, background: "milkyway", music: "finalBoss", world: 4,
+      waves: [[{type:"alienFinalBoss",row:2,delay:260}], [{type:"guntankBoi",row:0,delay:180},{type:"guntankBoi",row:4,delay:420},{type:"unknownCubes",row:2,delay:680}], [{type:"alienFinalBoss",row:2,delay:300},{type:"ragingBoi",row:0,delay:620},{type:"ragingBoi",row:4,delay:760},{type:"alienGod",row:1,delay:980},{type:"alienGod",row:3,delay:1120}]], lava:[[3,1],[3,3],[5,0],[5,4],[6,2]]
+    }
+  ];
+  for (const lv of extraWorld4) if (!existingNames.has(lv.name)) CONFIG.levels.push(lv);
+
+  // Add a few useful level metadata fields.
+  for (const lv of CONFIG.levels) {
+    const match = String(lv.name || "").match(/^(\d+)-/);
+    lv.world = lv.world || (match ? Number(match[1]) : 0);
+    lv.difficulty = lv.difficulty || (lv.boss ? "Boss" : lv.world >= 4 ? "Hard" : lv.world >= 3 ? "Medium" : "Starter");
+    lv.tags = lv.tags || [];
+  }
+
+  // Make save migration gentle instead of exploding old saves.
+  const oldSaveKeys = ["plantsAgainstDerps_v25_save", "plantsAgainstDerps_v26_save"];
+  const existing = localStorage.getItem(CONFIG.saveKey);
+  if (!existing) {
+    for (const key of oldSaveKeys) {
+      const data = localStorage.getItem(key);
+      if (data) {
+        localStorage.setItem(CONFIG.saveKey, data);
+        break;
+      }
+    }
+  }
+}
+
+applyPAD27Patch();
+
+// Homepage UI polish override.
+showMenu = function showMenu() {
+  currentScreen = "menu";
+  state = null;
+  playMusic(CONFIG.audio.menuTrack);
+
+  setScreen(`
+    <div class="screen menu pad-home-v27">
+      <div class="panel heroPanel">
+        <div class="tiny">${CONFIG.version}</div>
+        <h1 class="title">${CONFIG.gameTitle}</h1>
+        <p class="sub">World 4 extended, Odd Alien fixed, Alien Gunner pew-pew repaired, and PAD Modder now has a fangame maker.</p>
+        <div class="stack bigMenuButtons">
+          <button class="btn good" onclick="showLevelSelect()">Play Story</button>
+          <button class="btn" onclick="showMinigames()">Minigames</button>
+          <button class="btn" onclick="showUpgrades()">Upgrade Plants</button>
+          <button class="btn" onclick="showShop()">Twig Shop</button>
+          <button class="btn" onclick="showAlmanac()">Meet Da Whatever</button>
+          <button class="btn" onclick="showCustomLevels()">Custom Levels</button>
+          <button class="btn warn" onclick="showSaveBackup()">Save Backup</button>
+          <button class="btn good" onclick="window.open('mod/','_self')">Open PAD Modder / Fangame Forge</button>
+        </div>
+      </div>
+      <div class="panel updatePanel">
+        <div class="topbar">${currencyHtml()}</div>
+        <h2>v2.7 update notes</h2>
+        <div class="cards miniCards">
+          <div class="card"><b>World 4 fixed</b><p class="tiny">Extra levels now extend into 4-11 through 4-20 instead of looping back to World 3.</p></div>
+          <div class="card"><b>Alien fix</b><p class="tiny">Odd Alien uses alien.png; Alien Gunner has stronger fixed ranged behavior.</p></div>
+          <div class="card"><b>New art</b><p class="tiny">Moss Cannon, Kaboom Cannon, Guntank Boi, Unknown Cubes, Three-Gun Prototype, and Raging Boi are included.</p></div>
+          <div class="card"><b>Better modder</b><p class="tiny">Create levels, plants, and derps for fangames with grouped texture/config output.</p></div>
+        </div>
+      </div>
+    </div>`);
+};
+
+showLevelSelect = function showLevelSelect() {
+  currentScreen = "levels";
+  playMusic(CONFIG.audio.menuTrack);
+  const byWorld = new Map();
+  CONFIG.levels.forEach((lv, i) => {
+    const w = lv.world || 0;
+    if (!byWorld.has(w)) byWorld.set(w, []);
+    byWorld.get(w).push({ lv, i });
+  });
+  const groups = [...byWorld.entries()].sort((a,b)=>a[0]-b[0]).map(([world, items]) => `
+    <section class="worldGroup">
+      <h2>${world ? `World ${world}` : "Extras / Minigames-ish"}</h2>
+      <div class="cards">
+        ${items.map(({lv,i}) => {
+          const unlocked = isLevelUnlocked(i);
+          const clear = save.cleared[lv.name] ? "✅ Cleared" : "";
+          return `<div class="card ${unlocked ? "" : "locked"}">
+            <h3>${lv.name} ${lv.title || ""}</h3>
+            <p class="tiny">${lv.desc || ""}</p>
+            <p class="tiny">${clear} ${lv.difficulty ? `• ${lv.difficulty}` : ""}</p>
+            <button class="btn good" ${unlocked ? "" : "disabled"} onclick="showLoadoutPicker(${i},'levels')">${unlocked ? "Pick Your Bullcrap" : "Locked"}</button>
+          </div>`;
+        }).join("")}
+      </div>
+    </section>`).join("");
+  setScreen(`<div class="screen"><div class="topbar"><button class="btn" onclick="showMenu()">← Menu</button>${currencyHtml()}</div><h1 class="title">Level Selectr</h1><p class="sub">Grouped by world so World 4 does not pretend to be World 3 anymore.</p>${groups}</div>`);
+};
+
+showAlmanac = function showAlmanac() {
+  const groupPlants = Object.entries(CONFIG.plantGroups || { all:{title:"Plants", plants:Object.keys(CONFIG.plants)} }).map(([gid, group]) => `
+    <h2>${group.title}</h2>
+    <div class="cards">${group.plants.filter(id => CONFIG.plants[id]).filter(id => !CONFIG.plants[id].hiddenPrototype || save.cleared["4-20"]).map(id => {
+      const p = CONFIG.plants[id];
+      return `<div class="card ${isPlantUnlocked(id) ? "" : "locked"}"><div class="row">${imgTag(p.img, 50)}<div><h3>${p.name}</h3><span class="tiny">${p.role || "Plant"} • ${isPlantUnlocked(id) ? "Unlocked" : "Locked"}</span></div></div><p class="tiny">${p.desc || ""}</p></div>`;
+    }).join("")}</div>`).join("");
+
+  const groupEnemies = Object.entries(CONFIG.enemyGroups || { all:{title:"Enemies", enemies:Object.keys(CONFIG.enemies)} }).map(([gid, group]) => `
+    <h2>${group.title}</h2>
+    <div class="cards">${group.enemies.filter(id => CONFIG.enemies[id]).map(id => {
+      const e = CONFIG.enemies[id];
+      return `<div class="card"><div class="row">${imgTag(e.img, 50)}<div><h3>${e.name}</h3><span class="tiny">HP ${e.hp} • Size ${e.size || 1}x ${e.rangedShooter ? "• Gunner" : ""}</span></div></div><p class="tiny">${e.desc || ""}</p></div>`;
+    }).join("")}</div>`).join("");
+
+  setScreen(`<div class="screen"><div class="topbar"><button class="btn" onclick="showMenu()">← Menu</button>${currencyHtml()}</div><h1 class="title">Meet Da Whatever</h1><p class="sub">Now grouped like the level/world system.</p>${groupPlants}${groupEnemies}</div>`);
+};
+
+// Hide unused prototype from loadout until later; the config remains for fangame makers.
+const oldRenderLoadoutPicker_v27 = renderLoadoutPicker;
+renderLoadoutPicker = function renderLoadoutPicker() {
+  if (!pendingLoadout) return oldRenderLoadoutPicker_v27();
+  const oldPlants = CONFIG.plants;
+  const hidden = {};
+  for (const [id,p] of Object.entries(CONFIG.plants)) {
+    if (p.hiddenPrototype) hidden[id]=p;
+  }
+  for (const id of Object.keys(hidden)) delete CONFIG.plants[id];
+  try { oldRenderLoadoutPicker_v27(); }
+  finally { Object.assign(CONFIG.plants, hidden); }
+};
 
 boot();
