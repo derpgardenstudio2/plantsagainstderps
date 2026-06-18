@@ -1,0 +1,18 @@
+Plants Against Derps v2.8 - Clown Multiverse Update
+
+Added:
+- World 5: Clown Multiverse, 10 chaotic hard levels.
+- World 6: The Edge teaser level.
+- Blood Clown Moon system: every 30-60 seconds in World 5, the red board appears for 10 seconds and derps speed up.
+- New music: clownmultiverse.m4a for World 5.
+- New plants: Dark Missile Cannon, Egg of Power, Burnt Treegun, Overgrown Eye, Burning Eye, Mr. Orb.
+- New derps: Egg of Power, Curse of the Derp, Puppet Derp, Clown Car, Clown Derp, Edge Void.
+- Every 5th story level is tagged as a Challenge level and gets tougher pressure.
+
+Balancing:
+- Plant stacking cooldowns now have a soft cap so Tree Gun / Three-Gun style plants cannot turn into boss one-tappers too quickly.
+- Bosses and elite enemies now resist rapid boss-melting damage sources.
+- World 5 is intentionally spammy and hard, but starts with high Glow to keep it playable.
+
+Editor:
+- Fangame Forge dropdowns know about World 5/6 backgrounds, music, and new enemies.

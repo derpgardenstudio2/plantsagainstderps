@@ -1,5 +1,5 @@
 // ============================================================
-// Plants Against Derps v2.7 - Fangame Forge Update
+// Plants Against Derps v2.8 - Clown Multiverse Update
 // Edit in the config thingy
 // Features: direct image paths, pink-square fallback, fixed unlocks,
 // loadout picker, upgrades, minigames, chess 1-4, enemy sizes/hitboxes,
@@ -11,7 +11,7 @@
 
 const CONFIG = {
   gameTitle: "Plants Against Derps",
-  saveKey: "plantsAgainstDerps_v27_save",
+  saveKey: "plantsAgainstDerps_v28_save",
 
   board: { canvasW: 900, canvasH: 520, rows: 5, cols: 9, gridX: 80, gridY: 78, cellW: 86, cellH: 82 },
 
@@ -4878,6 +4878,311 @@ renderLoadoutPicker = function renderLoadoutPicker() {
   for (const id of Object.keys(hidden)) delete CONFIG.plants[id];
   try { oldRenderLoadoutPicker_v27(); }
   finally { Object.assign(CONFIG.plants, hidden); }
+};
+
+
+// ============================================================
+// PAD v2.8 - Clown Multiverse Update patch
+// World 5, Blood Clown Moon, The Edge, merge balancing, challenge levels.
+// ============================================================
+function applyPAD28Patch() {
+  CONFIG.version = "2.8 Clown Multiverse Update";
+  CONFIG.gameTitle = "Plants Against Derps: Clown Multiverse";
+  CONFIG.saveKey = "plantsAgainstDerps_v28_save";
+
+  Object.assign(CONFIG.audio.tracks, {
+    clownMultiverse: "audio/clownmultiverse.m4a",
+    edge: "audio/nerd.m4a"
+  });
+
+  Object.assign(CONFIG.backgrounds, {
+    clownBrown: "assets/bg-clown-brown.png",
+    clownBlood: "assets/bg-clown-blood.png",
+    clownChaos: "assets/bg-clown-chaos.png",
+    clownTeal: "assets/bg-clown-teal.png",
+    clownGreen: "assets/bg-clown-green.png",
+    theEdge: "assets/bg-the-edge.png"
+  });
+
+  Object.assign(CONFIG.images, {
+    darkMissileCannon: "assets/plant-dark-missile-cannon.png",
+    eggPowerPlant: "assets/plant-egg-of-power.png",
+    burntTreegun: "assets/plant-burnt-treegun.png",
+    overgrownEye: "assets/plant-overgrown-eye.png",
+    burningEye: "assets/plant-burning-eye.png",
+    mrOrb: "assets/plant-mr-orb.png",
+    eggPowerDerp: "assets/enemy-egg-of-power.png",
+    curseDerp: "assets/enemy-curse-of-the-derp.png",
+    puppetDerp: "assets/enemy-puppet-derp.png",
+    clownCar: "assets/enemy-clown-car.png",
+    clownDerp: "assets/enemy-clown-derp.png"
+  });
+
+  CONFIG.gameplay.maxPlantStack = 5;
+  CONFIG.gameplay.stackCooldownFloor = 0.38;
+  CONFIG.gameplay.bossDamageResist = 0.72;
+  CONFIG.gameplay.bossPerHitDamageCap = 260;
+  CONFIG.gameplay.bossOverperformerMult = 0.58;
+  CONFIG.gameplay.challengeEveryFifth = true;
+  CONFIG.gameplay.challengeHpMult = 1.28;
+  CONFIG.gameplay.challengeSpeedMult = 1.10;
+  CONFIG.gameplay.bloodMoonSpeedMult = 1.72;
+  CONFIG.gameplay.bloodMoonSpawnDelayMult = 0.72;
+
+  Object.assign(CONFIG.plants, {
+    darkMissileCannon: {
+      name: "Dark Missile Cannon", cost: 260, hp: 90, img: "darkMissileCannon",
+      desc: "Fires slow heavy missiles that splash clown nonsense.", role: "Missile Splash", unlockAt: "5-2",
+      shooter: true, fireType: "lob", shootCooldown: 260, projectileDamage: 130, areaRadius: 120, projectileSpeed: 4, placementCooldown: 480
+    },
+    eggPowerPlant: {
+      name: "Egg of Power", cost: 190, hp: 160, img: "eggPowerPlant",
+      desc: "A risky egg battery. Makes Glow, but World 5 derps seem to recognize it.", role: "Producer", unlockAt: "5-1",
+      producer: true, produceAmount: 85, produceCooldown: 1400, placementCooldown: 360
+    },
+    burntTreegun: {
+      name: "Burnt Treegun", cost: 135, hp: 80, img: "burntTreegun",
+      desc: "A cursed Tree Gun variant. Better burst, worse recharge, much less boss-cheese.", role: "Cursed Shooter", unlockAt: "5-3",
+      shooter: true, fireType: "straight", shootCooldown: 130, projectileDamage: 36, projectileSpeed: 6.2, placementCooldown: 260
+    },
+    overgrownEye: {
+      name: "Overgrown Eye", cost: 210, hp: 115, img: "overgrownEye",
+      desc: "Watches lanes and shoots nearby lanes when chaos gets too close.", role: "Lane Watcher", unlockAt: "5-4",
+      shooter: true, fireType: "scatter", shootCooldown: 165, projectileDamage: 30, projectileSpeed: 5.4, placementCooldown: 340
+    },
+    burningEye: {
+      name: "Burning Eye", cost: 235, hp: 100, img: "burningEye",
+      desc: "Anti-clown focused eye. Bonus damage to clown and edge enemies.", role: "Anti-Clown", unlockAt: "5-5",
+      shooter: true, fireType: "straight", shootCooldown: 92, projectileDamage: 31, projectileSpeed: 6.8,
+      bonusVsTags: ["clown", "edge"], bonusMultiplier: 1.65, placementCooldown: 320
+    },
+    mrOrb: {
+      name: "Mr. Orb", cost: 175, hp: 75, img: "mrOrb",
+      desc: "Cheap orb shooter. Looks harmless, is not emotionally stable.", role: "Orb Shooter", unlockAt: "5-6",
+      shooter: true, fireType: "straight", shootCooldown: 80, projectileDamage: 20, projectileSpeed: 7.1, doubleShotChance: 10, placementCooldown: 250
+    }
+  });
+
+  Object.assign(CONFIG.enemies, {
+    eggPowerDerp: { name: "Egg of Power", hp: 330, speed: 0.145, damage: 18, img: "eggPowerDerp", size: 1.20, tags: ["clown"], desc: "The egg chose the wrong side." },
+    curseDerp: { name: "Curse of the Derp", hp: 540, speed: 0.105, damage: 26, img: "curseDerp", size: 1.30, tags: ["clown", "curse"], rangedShooter: true, shootCooldown: 150, shotDamage: 14, shotSpeed: 3.3, desc: "A curse with questionable handwriting." },
+    puppetDerp: { name: "Puppet Derp", hp: 180, speed: 0.34, damage: 14, img: "puppetDerp", size: 0.95, tags: ["clown"], desc: "It walks like someone else is holding the keyboard." },
+    clownCar: { name: "Clown Car", hp: 760, speed: 0.12, damage: 34, img: "clownCar", size: 1.55, tags: ["clown"], boss: true, desc: "Too many clowns, not enough warranty." },
+    clownDerp: { name: "Clown Derp", hp: 145, speed: 0.44, damage: 12, img: "clownDerp", size: 0.95, tags: ["clown"], desc: "A fast clown problem." },
+    edgeVoid: { name: "Edge Void", hp: 480, speed: 0.115, damage: 30, img: "curseDerp", size: 1.35, tags: ["edge"], boss: true, rangedShooter: true, shootCooldown: 120, shotDamage: 20, shotSpeed: 3.6, desc: "Something from the edge of the PAD universe." }
+  });
+
+  CONFIG.defaultLoadout = ["campfr", "treeGun", "rosegun", "soggyMattress", "kaboom"];
+
+  CONFIG.plantGroups = CONFIG.plantGroups || {};
+  CONFIG.plantGroups.clown = {
+    title: "World 5 - Clown Multiverse Plants",
+    plants: ["darkMissileCannon", "eggPowerPlant", "burntTreegun", "overgrownEye", "burningEye", "mrOrb"]
+  };
+  CONFIG.enemyGroups = CONFIG.enemyGroups || {};
+  CONFIG.enemyGroups.clown = {
+    title: "World 5 - Clown Multiverse Derps",
+    enemies: ["eggPowerDerp", "curseDerp", "puppetDerp", "clownCar", "clownDerp"]
+  };
+  CONFIG.enemyGroups.edge = { title: "World 6 - The Edge", enemies: ["edgeVoid"] };
+
+  const existing = new Set(CONFIG.levels.map(lv => lv.name));
+  const rows = [0,1,2,3,4];
+  const spam = (types, start=80, gap=90) => types.map((type, i) => ({ type, row: rows[i % 5], delay: start + i * gap }));
+  const world5 = [
+    { name: "5-1", title: "Clown Multiverse Opens", desc: "The board changes. The clown laws begin.", startGlow: 675, background: "clownBrown", music: "clownMultiverse", world: 5, difficulty: "Hard", bloodMoon: true, waves: [ spam(["clownDerp","basic","clownDerp"],80,110), spam(["puppetDerp","clownDerp","fast","clownDerp"],70,95), spam(["eggPowerDerp","clownDerp","puppetDerp","clownDerp"],120,130) ], lava: [[4,1],[4,3]] },
+    { name: "5-2", title: "Red Blue Noise", desc: "Spam lanes. Bring walls and questionable confidence.", startGlow: 725, background: "clownChaos", music: "clownMultiverse", world: 5, difficulty: "Hard", bloodMoon: true, waves: [ spam(["clownDerp","clownDerp","puppetDerp","clownDerp","fast"],70,80), spam(["eggPowerDerp","clownDerp","clownDerp","puppetDerp","armored"],120,90), spam(["curseDerp","clownDerp","clownDerp","eggPowerDerp"],160,130) ], lava: [[3,0],[5,4]] },
+    { name: "5-3", title: "Puppet Lane Panic", desc: "The puppets have entered their annoying era.", startGlow: 760, background: "clownTeal", music: "clownMultiverse", world: 5, difficulty: "Hard", bloodMoon: true, waves: [ spam(["puppetDerp","puppetDerp","clownDerp","puppetDerp"],70,85), spam(["curseDerp","puppetDerp","clownDerp","puppetDerp","eggPowerDerp"],120,100), spam(["puppetDerp","puppetDerp","puppetDerp","clownDerp","curseDerp"],80,80) ], lava: [[2,2],[6,2]] },
+    { name: "5-4", title: "Eggs Should Not Move", desc: "Egg of Power shows up on both sides. This is a conflict of interest.", startGlow: 780, background: "clownGreen", music: "clownMultiverse", world: 5, difficulty: "Hard", bloodMoon: true, waves: [ spam(["eggPowerDerp","clownDerp","eggPowerDerp"],120,140), spam(["puppetDerp","eggPowerDerp","curseDerp","clownDerp"],90,120), spam(["eggPowerDerp","eggPowerDerp","clownDerp","curseDerp","puppetDerp"],120,110) ], lava: [[1,1],[7,3]] },
+    { name: "5-5", title: "Challenge: Clown Car Incident", desc: "Every 5th level is nastier now. This one honks back.", startGlow: 850, background: "clownChaos", music: "clownMultiverse", world: 5, difficulty: "Challenge", challenge: true, bloodMoon: true, waves: [ spam(["clownDerp","puppetDerp","clownDerp","puppetDerp","clownDerp"],60,65), spam(["clownCar","clownDerp","clownDerp","eggPowerDerp"],150,150), spam(["clownCar","curseDerp","puppetDerp","clownDerp","clownDerp","eggPowerDerp"],180,125) ], lava: [[2,0],[2,4],[6,1],[6,3]] },
+    { name: "5-6", title: "Orb Licensing Office", desc: "Mr. Orb arrives to make the clown multiverse slightly less legal.", startGlow: 820, background: "clownBrown", music: "clownMultiverse", world: 5, difficulty: "Hard", bloodMoon: true, waves: [ spam(["clownDerp","curseDerp","clownDerp"],80,100), spam(["puppetDerp","eggPowerDerp","clownDerp","curseDerp"],120,105), spam(["curseDerp","curseDerp","clownDerp","clownDerp","puppetDerp"],150,105) ], lava: [[3,1],[5,3]] },
+    { name: "5-7", title: "Blood Moon Practice", desc: "The red background is not a decoration. It is a threat.", startGlow: 850, background: "clownTeal", music: "clownMultiverse", world: 5, difficulty: "Very Hard", bloodMoon: true, waves: [ spam(["clownDerp","clownDerp","clownDerp","puppetDerp","fast"],60,70), spam(["curseDerp","eggPowerDerp","clownDerp","clownDerp","puppetDerp"],100,90), spam(["clownCar","clownDerp","curseDerp","clownDerp","puppetDerp"],160,110) ], lava: [[4,0],[4,2],[4,4]] },
+    { name: "5-8", title: "Too Many Doors", desc: "There are no doors. They arrive anyway.", startGlow: 875, background: "clownGreen", music: "clownMultiverse", world: 5, difficulty: "Very Hard", bloodMoon: true, waves: [ spam(["puppetDerp","clownDerp","puppetDerp","clownDerp","puppetDerp"],50,70), spam(["eggPowerDerp","curseDerp","clownDerp","eggPowerDerp","puppetDerp"],100,95), spam(["clownDerp","clownDerp","clownDerp","curseDerp","clownCar","clownDerp"],60,110) ], lava: [[1,0],[7,4]] },
+    { name: "5-9", title: "Multiverse Traffic Jam", desc: "The clown cars found the highway and unfortunately it is your lawn.", startGlow: 925, background: "clownChaos", music: "clownMultiverse", world: 5, difficulty: "Very Hard", bloodMoon: true, waves: [ spam(["clownCar","clownDerp","puppetDerp"],180,130), spam(["clownCar","eggPowerDerp","curseDerp","clownDerp"],140,120), spam(["clownCar","clownCar","clownDerp","puppetDerp","curseDerp"],180,140) ], lava: [[2,1],[2,3],[6,1],[6,3]] },
+    { name: "5-10", title: "Challenge: Honk End", desc: "World 5 ends with pure clown spam. The lawn is suing.", startGlow: 1050, background: "clownGreen", music: "clownMultiverse", world: 5, difficulty: "Challenge Boss", challenge: true, bloodMoon: true, waves: [ spam(["clownDerp","puppetDerp","clownDerp","puppetDerp","clownDerp","puppetDerp"],50,55), spam(["clownCar","curseDerp","eggPowerDerp","clownDerp","clownDerp"],140,95), spam(["clownCar","clownCar","curseDerp","eggPowerDerp","clownDerp","puppetDerp","clownDerp"],160,100) ], lava: [[1,1],[1,3],[4,2],[7,1],[7,3]] },
+    { name: "6-1", title: "The Edge", desc: "The PAD universe runs out of safe places. This is a teaser for whatever comes next.", startGlow: 950, background: "theEdge", music: "edge", world: 6, difficulty: "Edge Teaser", waves: [ spam(["edgeVoid","curseDerp"],180,180), spam(["edgeVoid","puppetDerp","curseDerp"],160,150), spam(["edgeVoid","edgeVoid","clownDerp"],200,190) ], lava: [[4,0],[4,1],[4,3],[4,4]] }
+  ];
+  for (const lv of world5) if (!existing.has(lv.name)) CONFIG.levels.push(lv);
+
+  for (const lv of CONFIG.levels) {
+    const match = String(lv.name || "").match(/^(\d+)-(\d+)/);
+    lv.world = lv.world || (match ? Number(match[1]) : 0);
+    const num = match ? Number(match[2]) : 0;
+    if (num && num % 5 === 0) {
+      lv.challenge = true;
+      if (!String(lv.difficulty || "").includes("Challenge")) lv.difficulty = "Challenge";
+      lv.tags = Array.from(new Set([...(lv.tags || []), "challenge"]));
+      lv.desc = (lv.desc || "") + (String(lv.desc || "").includes("Challenge") ? "" : " [Every 5th level challenge.] ");
+    }
+  }
+
+  const oldSaveKeys = ["plantsAgainstDerps_v25_save", "plantsAgainstDerps_v26_save", "plantsAgainstDerps_v27_save"];
+  if (!localStorage.getItem(CONFIG.saveKey)) {
+    for (const key of oldSaveKeys) {
+      const data = localStorage.getItem(key);
+      if (data) { localStorage.setItem(CONFIG.saveKey, data); break; }
+    }
+  }
+}
+
+applyPAD28Patch();
+
+const oldStartLevel_v28 = startLevel;
+startLevel = function startLevel_v28(index = 0, listName = "levels", loadout = CONFIG.defaultLoadout) {
+  oldStartLevel_v28(index, listName, loadout);
+  if (!state) return;
+  const level = state.level || {};
+  state.challengeLevel = !!level.challenge;
+  if (level.bloodMoon || level.world === 5) {
+    state.bloodMoon = {
+      active: false,
+      nextTick: state.tick + rand(30 * 60, 60 * 60),
+      endTick: 0,
+      normalBackground: level.background,
+      bloodBackground: "clownBlood"
+    };
+    state.texts.push({ x: CONFIG.board.canvasW/2, y: 45, text: "Blood Clown Moon can happen here.", color: "#ff7777", life: 120 });
+  }
+};
+
+const oldGetStackMultiplier_v28 = getStackMultiplier;
+getStackMultiplier = function getStackMultiplier_v28(p) {
+  const lvl = getStackLevel(p);
+  return Math.max(CONFIG.gameplay.stackCooldownFloor || 0.38, Math.pow(0.72, lvl - 1));
+};
+
+const oldStackPlant_v28 = stackPlant;
+stackPlant = function stackPlant_v28(existing, def, id) {
+  oldStackPlant_v28(existing, def, id);
+  if (existing && existing.stack >= 4) {
+    popText(existing.x, existing.y + 18, "soft cap", "#ffd36a");
+  }
+};
+
+const oldSpawnEnemy_v28 = spawnEnemy;
+spawnEnemy = function spawnEnemy_v28(sp) {
+  const before = state?.enemies?.length || 0;
+  const copy = { ...(sp || {}) };
+  if (state?.challengeLevel) {
+    const def = CONFIG.enemies[copy.type] || CONFIG.enemies.basic;
+    copy.hp = Math.round(Number(copy.hp || def.hp) * (CONFIG.gameplay.challengeHpMult || 1.25));
+    copy.speed = Number(copy.speed || def.speed) * (CONFIG.gameplay.challengeSpeedMult || 1.1);
+  }
+  if (state?.bloodMoon?.active) {
+    const def = CONFIG.enemies[copy.type] || CONFIG.enemies.basic;
+    copy.speed = Number(copy.speed || def.speed) * (CONFIG.gameplay.bloodMoonSpeedMult || 1.7);
+  }
+  oldSpawnEnemy_v28(copy);
+  const e = state?.enemies?.[before];
+  if (e && !e.baseSpeed) e.baseSpeed = e.speed;
+};
+
+const oldUpdateWaves_v28 = updateWaves;
+updateWaves = function updateWaves_v28() {
+  if (state?.bloodMoon?.active && state.waveActive && Array.isArray(state.spawnQueue)) {
+    for (const s of state.spawnQueue) {
+      if (!s._bloodAdjusted) {
+        s.delay = Math.max(10, Math.round(s.delay * (CONFIG.gameplay.bloodMoonSpawnDelayMult || 0.72)));
+        s._bloodAdjusted = true;
+      }
+    }
+  }
+  oldUpdateWaves_v28();
+};
+
+const oldUpdateEffects_v28 = updateEffects;
+updateEffects = function updateEffects_v28() {
+  oldUpdateEffects_v28();
+  if (!state?.bloodMoon) return;
+  const bm = state.bloodMoon;
+  if (!bm.active && state.tick >= bm.nextTick) {
+    bm.active = true;
+    bm.endTick = state.tick + 10 * 60;
+    state.shake = 10;
+    state.texts.push({ x: CONFIG.board.canvasW/2, y: 72, text: "BLOOD CLOWN MOON", color: "#ff2b2b", life: 120 });
+    playSfx("no");
+  }
+  if (bm.active && state.tick >= bm.endTick) {
+    bm.active = false;
+    bm.nextTick = state.tick + rand(30 * 60, 60 * 60);
+    state.texts.push({ x: CONFIG.board.canvasW/2, y: 72, text: "the honking stops... for now", color: "#ffaaaa", life: 90 });
+  }
+  for (const e of state.enemies) {
+    if (!e.baseSpeed) e.baseSpeed = e.speed;
+    const mult = bm.active ? (CONFIG.gameplay.bloodMoonSpeedMult || 1.7) : 1;
+    e.speed = e.baseSpeed * mult;
+  }
+};
+
+const oldCalcDamage_v28 = calcDamage;
+calcDamage = function calcDamage_v28(base, sourceId, target) {
+  const res = oldCalcDamage_v28(base, sourceId, target);
+  const enemyDef = CONFIG.enemies[target?.type] || {};
+  if (enemyDef.boss || enemyDef.elite) {
+    let mult = CONFIG.gameplay.bossDamageResist || 0.72;
+    if (["treeGun", "threeGunPrototype", "burntTreegun", "starfruitKnockoff"].includes(sourceId)) {
+      mult *= CONFIG.gameplay.bossOverperformerMult || 0.58;
+    }
+    res.dmg = Math.min(Math.round(res.dmg * mult), CONFIG.gameplay.bossPerHitDamageCap || 260);
+  }
+  return res;
+};
+
+const oldDrawBackground_v28 = drawBackground;
+drawBackground = function drawBackground_v28() {
+  if (state?.bloodMoon?.active) {
+    const old = state.level.background;
+    state.level.background = state.bloodMoon.bloodBackground;
+    oldDrawBackground_v28();
+    state.level.background = old;
+    ctx.fillStyle = "rgba(120,0,0,.22)";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    return;
+  }
+  oldDrawBackground_v28();
+};
+
+const oldUpdateHud_v28 = updateHud;
+updateHud = function updateHud_v28() {
+  oldUpdateHud_v28();
+  const waveHud = document.getElementById("waveHud");
+  if (waveHud && state?.bloodMoon?.active) waveHud.textContent += " • BLOOD MOON";
+  if (waveHud && state?.challengeLevel) waveHud.textContent += " • CHALLENGE";
+};
+
+showMenu = function showMenu() {
+  currentScreen = "menu";
+  state = null;
+  playMusic(CONFIG.audio.menuTrack);
+  setScreen(`
+    <div class="screen menu pad-home-v27 pad-home-v28">
+      <div class="panel heroPanel">
+        <div class="tiny">${CONFIG.version}</div>
+        <h1 class="title">${CONFIG.gameTitle}</h1>
+        <p class="sub">World 5 is the Clown Multiverse: spam, Blood Clown Moon, new plants, clown derps, and better merge balancing.</p>
+        <div class="stack bigMenuButtons">
+          <button class="btn good" onclick="showLevelSelect()">Play Story</button>
+          <button class="btn" onclick="showMinigames()">Minigames</button>
+          <button class="btn" onclick="showUpgrades()">Upgrade Plants</button>
+          <button class="btn" onclick="showShop()">Twig Shop</button>
+          <button class="btn" onclick="showAlmanac()">Meet Da Whatever</button>
+          <button class="btn" onclick="showCustomLevels()">Custom Levels</button>
+          <button class="btn warn" onclick="showSaveBackup()">Save Backup</button>
+          <button class="btn good" onclick="window.open('mod/','_self')">Open PAD Modder / Fangame Forge</button>
+        </div>
+      </div>
+      <div class="panel updatePanel">
+        <div class="topbar">${currencyHtml()}</div>
+        <h2>v2.8 update notes</h2>
+        <div class="cards miniCards">
+          <div class="card"><b>World 5</b><p class="tiny">Clown Multiverse adds 10 chaotic levels, rotating backgrounds, and your clownmultiverse music.</p></div>
+          <div class="card"><b>Blood Clown Moon</b><p class="tiny">Every 30–60 seconds in World 5, the red background appears for 10 seconds and derps speed up.</p></div>
+          <div class="card"><b>Merge balance</b><p class="tiny">Stacking now has a cooldown soft cap and bosses resist boss-melting spam.</p></div>
+          <div class="card"><b>Every 5th level</b><p class="tiny">5th/10th/etc. levels are marked as Challenge levels and get tougher pressure.</p></div>
+          <div class="card"><b>World 6 teaser</b><p class="tiny">The Edge begins with a dark universe-ending board.</p></div>
+        </div>
+      </div>
+    </div>`);
 };
 
 boot();

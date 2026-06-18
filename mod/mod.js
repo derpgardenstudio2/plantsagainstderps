@@ -1,11 +1,11 @@
-// PAD Modder v2.7 - Level Editor + Plant Maker + Derp Maker + Pack Export
+// PAD Modder v2.8 - Clown Multiverse Fangame Forge
 "use strict";
 const STORAGE_KEY="pad_custom_levels_v1";
-const PLANT_KEY="pad_fangame_plants_v27";
-const DERP_KEY="pad_fangame_derps_v27";
-const BACKGROUNDS=["forest","desert","cloud","milkyway","chess","debugHill","matrixGrid","glitchArchive"];
-const MUSIC=["world1","battle","desert","menu","victory","finalBoss"];
-const ENEMIES=["basic","armored","fast","assasinRover","mechaDerp","wetDerp","droneGun","droneSaw","alien","alienGun","alienShotgunner","alienGod","alienFinalBoss","guntankBoi","unknownCubes","ragingBoi","cardboardTank"];
+const PLANT_KEY="pad_fangame_plants_v28";
+const DERP_KEY="pad_fangame_derps_v28";
+const BACKGROUNDS=["forest","desert","cloud","milkyway","chess","debugHill","matrixGrid","glitchArchive","clownBrown","clownBlood","clownChaos","clownTeal","clownGreen","theEdge"];
+const MUSIC=["world1","battle","desert","menu","victory","finalBoss","clownMultiverse","edge"];
+const ENEMIES=["basic","armored","fast","assasinRover","mechaDerp","wetDerp","droneGun","droneSaw","alien","alienGun","alienShotgunner","alienGod","alienFinalBoss","guntankBoi","unknownCubes","ragingBoi","cardboardTank","eggPowerDerp","curseDerp","puppetDerp","clownCar","clownDerp","edgeVoid"];
 const MAX_WAVES=15,MAX_ENEMIES_PER_WAVE=12;
 let current=makeDefaultLevel();
 let savedLevels=loadJson(STORAGE_KEY,[]);
@@ -15,7 +15,7 @@ function clamp(num,min,max){return Math.max(min,Math.min(max,Number(num)||0));}
 function $(id){return document.getElementById(id);} 
 function loadJson(k,fallback){try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(fallback));}catch{return fallback;}}
 function saveJson(k,v){localStorage.setItem(k,JSON.stringify(v));}
-function makeDefaultLevel(){return{name:"Custom-1",title:"My Weird Level",desc:"Made in PAD Modder.",world:4,difficulty:"Medium",startGlow:200,background:"forest",music:"battle",waves:[[{type:"basic",row:2,delay:120}]],lava:[],tags:["custom"]};}
+function makeDefaultLevel(){return{name:"Custom-1",title:"My Weird Level",desc:"Made in PAD Modder.",world:5,difficulty:"Hard",startGlow:200,background:"forest",music:"battle",waves:[[{type:"basic",row:2,delay:120}]],lava:[],tags:["custom"]};}
 function encodeLevel(level){return btoa(unescape(encodeURIComponent(JSON.stringify(level))));}
 function decodeLevel(code){return JSON.parse(decodeURIComponent(escape(atob(code.trim()))));}
 function fillDropdowns(){const bg=$("backgroundSelect"),music=$("musicSelect");bg.innerHTML="";music.innerHTML="";for(const item of BACKGROUNDS)bg.append(new Option(item,item));for(const item of MUSIC)music.append(new Option(item,item));}
@@ -44,5 +44,5 @@ function updatePack(){if($("packBox"))$("packBox").value=JSON.stringify(pack(),n
 function copyText(text){navigator.clipboard?.writeText(text).catch(()=>{});}
 function showTab(name){for(const el of ["level","plant","derp","pack"]){$(el+"Tab").classList.toggle("hidden",el!==name);}document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("on",b.dataset.tab===name));if(name==="pack")updatePack();}
 function hookEvents(){["levelName","levelTitle","levelDesc","worldNumber","difficultySelect","startGlow","backgroundSelect","musicSelect"].forEach(id=>$(id).addEventListener("input",syncLevelFromForm));$("newLevelBtn").onclick=()=>{if(!confirm("Start a new level? Unsaved changes will be lost."))return;current=makeDefaultLevel();syncFormFromLevel();};$("saveBtn").onclick=saveCurrentLevel;$("exportBtn").onclick=exportCurrent;$("importBtn").onclick=importFromBox;$("addWaveBtn").onclick=addWave;$("clearWavesBtn").onclick=()=>{if(confirm("Clear all waves?")){current.waves=[[]];syncLevelFromForm();renderWaves();}};$("clearLavaBtn").onclick=()=>{current.lava=[];syncLevelFromForm();renderLavaGrid();};document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>showTab(b.dataset.tab));document.querySelectorAll("#plantTab input,#plantTab select,#derpTab input,#derpTab select").forEach(i=>i.addEventListener("input",updateMakers));$("makePlantBtn").onclick=savePlant;$("makeDerpBtn").onclick=saveDerp;$("copyPlantBtn").onclick=()=>copyText(JSON.stringify(plantConfig(),null,2));$("copyDerpBtn").onclick=()=>copyText(JSON.stringify(derpConfig(),null,2));$("refreshPackBtn").onclick=updatePack;$("copyPackBtn").onclick=()=>copyText($("packBox").value);$("clearPackBtn").onclick=()=>{if(confirm("Clear saved custom plant/derp configs?")){savedPlants=[];savedDerps=[];saveJson(PLANT_KEY,[]);saveJson(DERP_KEY,[]);updatePack();}};}
-function boot(){fillDropdowns();hookEvents();syncFormFromLevel();updateMakers();updatePack();console.log("PAD Modder v2.7 Fangame Forge loaded.");}
+function boot(){fillDropdowns();hookEvents();syncFormFromLevel();updateMakers();updatePack();console.log("PAD Modder v2.8 Clown Multiverse Fangame Forge loaded.");}
 boot();
