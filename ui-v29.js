@@ -31,7 +31,7 @@
           <div><span class="pad29-update-badge">UI + PVP UPDATE</span></div>
           <div class="pad29-logo">PAD</div>
           <p class="sub">Plants Against Derps</p>
-          <p class="pad29-small">The regular game still uses your existing main.js. This page is only a safe UI layer.</p>
+          <p class="pad29-small">New UI, PVP mode in the works.</p>
           <div class="topbar" style="justify-content:center">${currencyHtml()}</div>
           <button class="btn good pad29-minigames" onclick="showMinigames()">MINIGAMES</button>
         </section>
