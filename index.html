@@ -3,60 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <title>Plants Against Derps</title>
-
+  <link rel="stylesheet" href="style.css?v=28" />
+  <link rel="stylesheet" href="ui-v29.css?v=1" />
   <style>
-    html,
-    body {
-      margin: 0;
-      min-height: 100%;
-      background: #071014;
-      color: white;
-      font-family: system-ui, Arial, sans-serif;
-    }
-
-    noscript {
-      display: block;
-      padding: 24px;
-      font-size: 20px;
-    }
-
-    #loading {
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      text-align: center;
-      background:
-        radial-gradient(circle at 20% 10%, rgba(80, 220, 255, 0.2), transparent 30%),
-        linear-gradient(135deg, #030608, #0c181d 55%, #05080a);
-    }
-
-    #loading h1 {
-      color: #f8ff74;
-      font-size: clamp(34px, 8vw, 80px);
-      margin: 0;
-    }
-
-    #loading p {
-      color: #d7faff;
-      font-size: 18px;
-    }
+    html, body { margin:0; min-height:100%; background:#071014; color:white; font-family:system-ui,Arial,sans-serif; }
+    #loading { min-height:100vh; display:grid; place-items:center; text-align:center; }
   </style>
 </head>
-
 <body>
-  <noscript>
-    Plants Against Derps needs JavaScript enabled to run.
-  </noscript>
+  <noscript>Plants Against Derps needs JavaScript enabled to run.</noscript>
+  <div id="loading"><div><h1>Plants Against Derps</h1><p>Loading da derps...</p></div></div>
 
-  <div id="loading">
-    <div>
-      <h1>Plants Against Derps</h1>
-      <p>Loading da derps...</p>
-    </div>
-  </div>
-
-  <script src="main.js?v=292-showmenu-fix"></script>
+  <!-- Keep your existing working gameplay file. -->
+  <script src="main.js?v=28"></script>
+  <!-- This file only redraws the homepage after the game has booted. -->
+  <script src="ui-v29.js?v=1"></script>
 </body>
 </html>

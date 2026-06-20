@@ -1,0 +1,35 @@
+/* PAD v2.9 UI-only drop-in. This does not replace gameplay CSS. */
+.pad29-home {
+  display:grid;
+  grid-template-columns:minmax(220px, 1fr) minmax(270px, 1.25fr) minmax(220px, 1fr);
+  gap:18px;
+  align-items:stretch;
+  max-width:1200px;
+  margin:0 auto;
+}
+.pad29-home .panel { min-width:0; }
+.pad29-logo {
+  font-size:clamp(72px, 13vw, 180px);
+  line-height:.82;
+  text-align:center;
+  letter-spacing:-.08em;
+  margin:18px 0 8px;
+  color:#f7ff76;
+  text-shadow:0 7px 0 #111, 0 0 28px rgba(106,255,224,.35);
+}
+.pad29-update-badge {
+  display:inline-flex; padding:8px 14px; border-radius:999px;
+  background:#ff5fcb; color:#111; font-weight:1000; transform:rotate(-2deg);
+}
+.pad29-section-title { margin:0 0 10px; font-size:22px; }
+.pad29-button-grid { display:grid; gap:10px; }
+.pad29-play { min-height:72px; font-size:24px; }
+.pad29-pvp { min-height:66px; background:linear-gradient(135deg,#ff5fcb,#7ee8ff)!important; color:#101016!important; }
+.pad29-minigames { min-height:100px; font-size:26px; }
+.pad29-center { display:flex; flex-direction:column; justify-content:center; text-align:center; }
+.pad29-small { opacity:.82; font-size:13px; }
+@media (max-width:850px){
+  .pad29-home{grid-template-columns:1fr;}
+  .pad29-center{order:-1;}
+  .pad29-logo{font-size:90px;}
+}
