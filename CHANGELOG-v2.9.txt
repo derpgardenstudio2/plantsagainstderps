@@ -1,0 +1,11 @@
+Plants Against Derps v2.9 — UI + PVP Connection Test
+
+- Rebuilt homepage into Main Game, Tools & Extras, and central update sections.
+- Added experimental PVP page.
+- Create or join six-character rooms.
+- Supabase Realtime Presence connection test.
+- Plant/Derp role preference and simple assignment.
+- Send test plant, derp, and ready actions between browsers.
+- Added Local Two-Tab fallback using BroadcastChannel.
+- Full loadouts, rerolls, 1250 Glow, and combat are planned after connection testing.
+- Existing v2.8 save key is preserved.
