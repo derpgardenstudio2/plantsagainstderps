@@ -1,5 +1,5 @@
 // ============================================================
-// Plants Against Derps v2.9 - UI + PVP Connection Test
+// Plants Against Derps v2.8 - Clown Multiverse Update
 // Edit in the config thingy
 // Features: direct image paths, pink-square fallback, fixed unlocks,
 // loadout picker, upgrades, minigames, chess 1-4, enemy sizes/hitboxes,
@@ -2371,30 +2371,6 @@ body::before {
 }
 .plantCard:hover::after { transform: translateX(20%); }
 
-/* PAD v2.9 UI + PVP homepage */
-.pad-home-v29 { min-height:100vh; padding:28px; background:radial-gradient(circle at 50% 12%,rgba(120,235,255,.20),transparent 28%),linear-gradient(145deg,#02070a,#09232c 48%,#081015); }
-.pad-v29-header { max-width:1320px; margin:0 auto 18px; display:flex; justify-content:space-between; align-items:flex-end; gap:18px; }
-.pad-v29-kicker { letter-spacing:.32em; color:#9cf5ff; font-weight:900; font-size:13px; }
-.pad-v29-logo { margin:0; font-size:clamp(74px,11vw,150px); line-height:.78; color:#f7ff78; text-shadow:0 0 18px rgba(247,255,120,.55),5px 6px 0 #122a31; }
-.pad-v29-wallet { display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
-.pad-v29-layout { max-width:1320px; margin:auto; display:grid; grid-template-columns:minmax(220px,290px) minmax(340px,1fr) minmax(220px,290px); gap:18px; align-items:start; }
-.pad-v29-column { display:grid; gap:11px; background:rgba(0,0,0,.34); border:1px solid rgba(135,236,255,.25); border-radius:22px; padding:16px; }
-.pad-v29-column h2 { margin:0 0 5px; color:#dffcff; }
-.pad-v29-column .btn { width:100%; min-height:50px; text-align:left; }
-.pad-v29-primary { font-size:22px; min-height:66px !important; }
-.pad-v29-pvp { border-color:#ff90e7; background:linear-gradient(135deg,#3b143a,#162c4b); font-size:20px; }
-.pad-v29-pvp span { float:right; font-size:11px; color:#ffe078; margin-top:5px; }
-.pad-v29-center { text-align:center; min-height:510px; display:flex; flex-direction:column; justify-content:center; }
-.pad-v29-update-badge { display:inline-block; align-self:center; background:#f7ff78; color:#102126; font-weight:1000; border-radius:999px; padding:8px 14px; letter-spacing:.08em; }
-.pad-v29-center h2 { font-size:clamp(25px,3vw,40px); margin-bottom:4px; }
-.pad-v29-feature-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin:18px 0; }
-.pad-v29-feature-grid article { text-align:left; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.13); border-radius:15px; padding:13px; }
-.pad-v29-feature-grid b,.pad-v29-feature-grid small { display:block; }
-.pad-v29-feature-grid small { opacity:.72; margin-top:5px; }
-.pad-v29-big-minigame { width:100%; min-height:68px; font-size:23px; margin-top:10px; }
-@media(max-width:940px){.pad-v29-layout{grid-template-columns:1fr}.pad-v29-center{order:-1;min-height:auto}.pad-v29-header{align-items:flex-start}.pad-v29-feature-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:560px){.pad-home-v29{padding:14px}.pad-v29-header{display:block}.pad-v29-wallet{justify-content:flex-start;margin-top:12px}.pad-v29-feature-grid{grid-template-columns:1fr}}
-
 `;
 
   document.head.appendChild(style);
@@ -2434,80 +2410,42 @@ function imgTag(id, size = 48) {
   `;
 }
 
-function showMenuV29() {
+function showMenu() {
   currentScreen = "menu";
   state = null;
   playMusic(CONFIG.audio.menuTrack);
 
   setScreen(`
-    <div class="screen pad-home-v29">
-      <header class="pad-v29-header">
-        <div>
-          <div class="pad-v29-kicker">PLANTS AGAINST DERPS</div>
-          <h1 class="pad-v29-logo">PAD</h1>
-          <p class="sub">v2.9 • UI + PVP Connection Test</p>
-        </div>
-        <div class="pad-v29-wallet">${currencyHtml()}</div>
-      </header>
+    <div class="screen menu">
+      <div class="panel">
+        <h1 class="title">${CONFIG.gameTitle}</h1>
+        <p class="sub">derpgardenstudio2 Expansion • stacking, extra minigames, and illegal lawn choices</p>
 
-      <main class="pad-v29-layout">
-        <section class="pad-v29-column pad-v29-main-actions">
-          <h2>Main Game</h2>
-          <button class="btn good pad-v29-primary" onclick="showLevelSelect()">▶ Play Story</button>
-          <button class="btn pad-v29-pvp" onclick="window.open('pvp/','_self')">⚔ PVP <span>Experimental</span></button>
+        <div class="stack">
+          <button class="btn good" onclick="showLevelSelect()">Play Story</button>
+          <button class="btn" onclick="showMinigames()">Minigames</button>
           <button class="btn" onclick="showUpgrades()">Upgrade Plants</button>
-          <button class="btn" onclick="showAlmanac()">Equip / Meet Da Whatever</button>
-        </section>
-
-        <section class="pad-v29-center panel">
-          <div class="pad-v29-update-badge">UI + PVP UPDATE</div>
-          <h2>Welcome to the rebuilt homepage</h2>
-          <p>
-            Story mode, tools, extras, and the experimental two-player PVP connection test
-            now have their own clear sections.
-          </p>
-          <div class="pad-v29-feature-grid">
-            <article><b>Plant vs Derp</b><small>Create or join a short-code room.</small></article>
-            <article><b>Realtime Test</b><small>Presence and test actions through Supabase.</small></article>
-            <article><b>Local Fallback</b><small>Test with two tabs even without internet rooms.</small></article>
-            <article><b>Next Step</b><small>Loadouts, rerolls, Glow, then actual combat.</small></article>
-          </div>
-          <button class="btn good pad-v29-big-minigame" onclick="showMinigames()">MINIGAMES</button>
-        </section>
-
-        <section class="pad-v29-column pad-v29-tools">
-          <h2>Tools & Extras</h2>
-          <button class="btn" onclick="showCustomLevels()">Level Maker / Custom Levels</button>
-          <button class="btn" onclick="window.open('mod/','_self')">PAD Modder / Fangame Forge</button>
           <button class="btn" onclick="showShop()">Twig Shop</button>
-          <button class="btn warn" onclick="showSaveBackup()">Saves / Backup</button>
-          <button class="btn" onclick="showV29Info()">Changelog + More</button>
-        </section>
-      </main>
-    </div>
-  `);
-}
-
-function showV29Info() {
-  currentScreen = "v29info";
-  setScreen(`
-    <div class="screen">
-      <div class="topbar">
-        <button class="btn" onclick="showMenu()">← Menu</button>
-        ${currencyHtml()}
+          <button class="btn" onclick="showAlmanac()">Meet Da Whatever</button>
+          <button class="btn" onclick="showCustomLevels()">Custom Levels</button>
+<button class="btn warn" onclick="showSaveBackup()">Save Backup</button>
+<button class="btn" onclick="window.open('mod/','_self')">Open PAD Modder</button>
+        </div>
       </div>
-      <h1 class="title">PAD v2.9 — UI + PVP</h1>
-      <div class="panel stack">
-        <h2>What works in this test build</h2>
-        <p>• New grouped homepage UI</p>
-        <p>• Create and join PVP rooms with short codes</p>
-        <p>• Realtime presence showing connected players</p>
-        <p>• Plant/Derp role preference and simple role assignment</p>
-        <p>• Send test plant / derp actions between browsers</p>
-        <p>• Local two-tab fallback with BroadcastChannel</p>
-        <h2>What comes next</h2>
-        <p>Random six-unit loadouts, three rerolls, 1250 Glow, ready confirmation, and the real synchronized battle.</p>
-        <button class="btn good" onclick="window.open('pvp/','_self')">Open PVP Test</button>
+
+      <div class="panel">
+        <div class="topbar">${currencyHtml()}</div>
+        <h2>New stuff in this build</h2>
+        <p>
+          Unlocks are repaired, plants can use direct asset paths,
+          missing images turn into pink squares, plant stacking now exists, and levels now ask you
+          to pick up to 5 plants first.
+        </p>
+        <p>
+          There are also critical hits, alien gunner shots, enemy size hitboxes,
+          speed controls, Beach Ball launching, and the chess minigame is now
+          4 levels from easy to deadly.
+        </p>
       </div>
     </div>
   `);
@@ -5212,7 +5150,7 @@ updateHud = function updateHud_v28() {
   if (waveHud && state?.challengeLevel) waveHud.textContent += " • CHALLENGE";
 };
 
-function showMenuV28Legacy() {
+showMenu = function showMenu() {
   currentScreen = "menu";
   state = null;
   playMusic(CONFIG.audio.menuTrack);
@@ -5246,8 +5184,5 @@ function showMenuV28Legacy() {
       </div>
     </div>`);
 };
-
-// Keep the v2.9 homepage active after older compatibility patches.
-showMenu = showMenuV29;
 
 boot();
