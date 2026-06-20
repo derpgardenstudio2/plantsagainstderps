@@ -1,13 +1,59 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PAD PVP Test</title><link rel="stylesheet" href="pvp.css"></head>
-<body><main class="shell">
-<header><a href="../">← PAD Menu</a><div><span class="eyebrow">EXPERIMENTAL</span><h1>PAD PVP Connection Test</h1><p>Connect two browsers first. Full 1250-Glow combat comes after this test works.</p></div></header>
-<section id="setup" class="panel setup-grid">
-<div><h2>Create Match</h2><label>Your name<input id="hostName" maxlength="18" placeholder="Host Derp"></label><label>Preferred side<select id="hostSide"><option value="random">Random</option><option value="plants">Plants</option><option value="derps">Derps</option></select></label><button id="createBtn" class="good">Create Online Room</button><button id="createLocalBtn">Create Local Two-Tab Room</button></div>
-<div><h2>Join Match</h2><label>Your name<input id="guestName" maxlength="18" placeholder="Guest Gremlin"></label><label>Join code<input id="joinCode" maxlength="8" placeholder="CAT482"></label><button id="joinBtn" class="good">Join Online Room</button><button id="joinLocalBtn">Join Local Two-Tab Room</button></div>
-</section>
-<section id="room" class="panel hidden"><div class="room-head"><div><span class="eyebrow">ROOM CODE</span><strong id="roomCode">------</strong></div><div id="connectionBadge" class="badge waiting">WAITING</div></div>
-<div class="columns"><div><h2>Connected Players</h2><div id="players" class="player-list"></div><p class="hint">Open this page on another device/browser and enter the same code.</p></div><div><h2>Connection Test</h2><button id="plantTest">Send Test Plant</button><button id="derpTest">Send Test Derp</button><button id="readyTest">Toggle Ready</button><button id="leaveBtn" class="danger">Leave Room</button></div></div>
-<h2>Room Log</h2><div id="log" class="log"></div></section>
-<section class="panel roadmap"><h2>This build tests only the server thingys</h2><div class="cards"><article><b>Now</b><span>Room codes, Presence, roles, test actions.</span></article><article><b>Next</b><span>Six-unit previews and three single-slot rerolls.</span></article><article><b>Then</b><span>1250 Glow, no producers, synchronized placement.</span></article><article><b>Later</b><span>Authoritative validation and anti-cheat.</span></article></div></section>
-</main><script type="module" src="pvp.js"></script></body></html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>PAD PvP Prototype</title>
+  <link rel="stylesheet" href="pvp.css?v=294">
+</head>
+<body>
+<main class="shell">
+  <header class="topbar">
+    <a class="back" href="../">← PAD Menu</a>
+    <div><span class="eyebrow">UI + PVP PROTOTYPE</span><h1>Plants vs Derps</h1><p>Host-authoritative experimental combat with lobby settings, rerolls, and round-kick validation.</p></div>
+  </header>
+
+  <section id="setup" class="panel setup-grid">
+    <div>
+      <h2>Create Match</h2>
+      <label>Your name<input id="hostName" maxlength="18" placeholder="Host Gremlin"></label>
+      <label>Preferred side<select id="hostSide"><option value="random">Random</option><option value="plants">Plants</option><option value="derps">Derps</option></select></label>
+      <label>Time limit <span id="timeOut">6 minutes</span><input id="timeLimit" type="range" min="1" max="10" value="6"></label>
+      <label>Starting Glow <span id="glowOut">1250</span><input id="startGlow" type="range" min="100" max="5000" step="50" value="1250"></label>
+      <label>Background<select id="backgroundSelect"></select></label>
+      <button id="createBtn" class="good">Create Online Room</button>
+      <button id="createLocalBtn">Create Local Two-Tab Room</button>
+    </div>
+    <div>
+      <h2>Join Match</h2>
+      <label>Your name<input id="guestName" maxlength="18" placeholder="Guest Goblin"></label>
+      <label>Join code<input id="joinCode" maxlength="8" placeholder="CAT482"></label>
+      <button id="joinBtn" class="good">Join Online Room</button>
+      <button id="joinLocalBtn">Join Local Two-Tab Room</button>
+      <p class="hint">The host chooses time, Glow, and background. Both players receive six random units and three single-slot rerolls.</p>
+    </div>
+  </section>
+
+  <section id="lobby" class="panel hidden">
+    <div class="room-head"><div><span class="eyebrow">ROOM CODE</span><strong id="roomCode">------</strong></div><div id="connectionBadge" class="badge waiting">WAITING</div></div>
+    <div class="lobby-grid">
+      <div><h2>Players</h2><div id="players" class="player-list"></div><div id="matchSettings" class="settings-card"></div></div>
+      <div><h2>Your loadout</h2><p class="hint">Click one card, then use a reroll. Producers and bosses are excluded.</p><div id="loadout" class="loadout"></div><div class="row"><button id="rerollBtn">Reroll selected (<span id="rerolls">3</span>)</button><button id="readyBtn" class="good">Ready</button></div><button id="leaveBtn" class="danger">Leave Room</button></div>
+    </div>
+    <div id="lobbyLog" class="log"></div>
+  </section>
+
+  <section id="game" class="game-wrap hidden">
+    <div class="hud panel"><div><b id="sideLabel">SIDE</b><span id="timer">06:00</span></div><div class="glow-bars"><span>Plants: <b id="plantGlow">1250</b></span><span>Derps: <b id="derpGlow">1250</b></span></div><div><button id="forfeitBtn" class="danger small">Forfeit</button></div></div>
+    <div id="battlefield" class="battlefield"><div id="board" class="board"></div></div>
+    <div class="controls panel"><h2 id="controlTitle">Deploy</h2><div id="unitTray" class="unit-tray"></div><p id="controlHint" class="hint"></p></div>
+  </section>
+
+  <section id="result" class="panel result hidden"><h2 id="resultTitle">Round Over</h2><p id="resultText"></p><button id="backLobbyBtn" class="good">Back to Lobby</button><a href="../" class="button-link">PAD Menu</a></section>
+
+  <section class="panel warning"><b>Experimental anti-cheat:</b> the host validates cost, loadout, cooldown, lane/tile, action rate, and match state. Invalid actions kick that player from the current round. Because this version runs in browsers, a malicious host cannot yet be fully trusted; proper public competitive play will need a server-side Edge Function later.
+  </section>
+</main>
+<script type="module" src="pvp.js?v=294"></script>
+</body>
+</html>
