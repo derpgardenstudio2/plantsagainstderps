@@ -14,7 +14,7 @@
     playMusic(CONFIG.audio.menuTrack);
 
     setScreen(`
-      <div class="screen pad29-home">
+      <div class="pad29-home">
         <section class="panel">
           <h2 class="pad29-section-title">Main Game</h2>
           <div class="pad29-button-grid">
