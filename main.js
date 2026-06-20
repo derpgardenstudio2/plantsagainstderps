@@ -2410,7 +2410,7 @@ function imgTag(id, size = 48) {
   `;
 }
 
-function showMenu() {
+window.showMenu = function showMenu() {
   currentScreen = "menu";
   state = null;
   playMusic(CONFIG.audio.menuTrack);
@@ -2449,7 +2449,7 @@ function showMenu() {
       </div>
     </div>
   `);
-}
+};
 
 function isLevelUnlocked(i) {
   return i === 0 || !!save.cleared[CONFIG.levels[i - 1]?.name];
@@ -2934,7 +2934,7 @@ function resetSaveDanger() {
   saveGame();
 
   toast("Save reset.");
-  showMenu();
+  window.showMenu();
 }
 
 function showSaveBackup() {
@@ -3403,7 +3403,7 @@ function startLevel(index = 0, listName = "levels", loadout = CONFIG.defaultLoad
 function exitGame() {
   loopId++;
   state = null;
-  showMenu();
+  window.showMenu();
 }
 
 function togglePause() {
@@ -4551,7 +4551,7 @@ function boot() {
   document.addEventListener("click", unlockAudio);
   document.addEventListener("keydown", unlockAudio);
 
-  showMenu();
+  window.showMenu();
 
   console.log("PAD v2.6 derpgardenstudio2 Expansion booted.");
 }
@@ -4785,7 +4785,7 @@ function applyPAD27Patch() {
 applyPAD27Patch();
 
 // Homepage UI polish override.
-showMenu = function showMenu() {
+window.showMenu = function showMenu() {
   currentScreen = "menu";
   state = null;
   playMusic(CONFIG.audio.menuTrack);
@@ -5150,7 +5150,7 @@ updateHud = function updateHud_v28() {
   if (waveHud && state?.challengeLevel) waveHud.textContent += " • CHALLENGE";
 };
 
-showMenu = function showMenu() {
+window.showMenu = function showMenu() {
   currentScreen = "menu";
   state = null;
   playMusic(CONFIG.audio.menuTrack);
