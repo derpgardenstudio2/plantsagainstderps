@@ -2434,7 +2434,7 @@ function imgTag(id, size = 48) {
   `;
 }
 
-function showMenu() {
+function showMenuV29() {
   currentScreen = "menu";
   state = null;
   playMusic(CONFIG.audio.menuTrack);
@@ -5212,7 +5212,7 @@ updateHud = function updateHud_v28() {
   if (waveHud && state?.challengeLevel) waveHud.textContent += " • CHALLENGE";
 };
 
-showMenu = function showMenu() {
+function showMenuV28Legacy() {
   currentScreen = "menu";
   state = null;
   playMusic(CONFIG.audio.menuTrack);
@@ -5246,5 +5246,8 @@ showMenu = function showMenu() {
       </div>
     </div>`);
 };
+
+// Keep the v2.9 homepage active after older compatibility patches.
+showMenu = showMenuV29;
 
 boot();
